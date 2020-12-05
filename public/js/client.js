@@ -44,30 +44,45 @@ images[6] = "./img/fruta4.PNG"
 images[7] = "./img/fruta4.PNG"
 images[8] = "./img/fruta5.PNG"
 
+var lista = [0,1,2,3,4,5,6,7,8];
+lista = lista.sort(function() {return Math.random() - 0.5});
+document.write(lista);
+
+for (var j=0; j<9;j++){
+    value = lista[j];
+    lista[j] = images[value];
+}
+
 var contador = 0;
 var points = 0;
 var mov = function(x){
-    gridMemorama[x].src = images[x];
+    gridMemorama[x].src = lista[x];
     console.log(gridMemorama[x].src)
     contador ++;
     if (contador == 1){
         positionOne = x;
     } else if (contador == 2){
-        if (images[positionOne] != images[x]){
+        if (lista[positionOne] != lista[x]){
             setTimeout(() => {  
                 gridMemorama[x].src = "./img/question.jpg";
                 gridMemorama[positionOne].src = "./img/question.jpg";
                 positionOne = -1
              }, 600);
-           
         } else {
             gridMemorama[x].onclick = function(){};
             gridMemorama[positionOne].onclick = function(){};
             points += 1;
+            checkPoints();
         }
         contador = 0;
-        
     }
-    
+}
+
+var checkPoints = function(x){
+    if (points == 4){
+        alert("GANASTE")
+        window.setTimeout(function(){
+            window.location.href = "" }, 600);
+    }
 }
 
