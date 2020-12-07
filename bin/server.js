@@ -79,20 +79,21 @@ io.sockets.on("connection", function(socket){
     })
 
     socket.on("restart", function(){
+        console.log("Juandirandindan")
         for (i=0; i<9; i++){
             gridMemorama[i]= "./img/question.jpg"
         }
 
-        lista = lista.sort(function() {return Math.random() - 0.5});
+        /* lista = lista.sort(function() {return Math.random() - 0.5});
         
         for (var j=0; j<9;j++){
             value = lista[j];
             lista[j] = images[value];
             console.log(lista[j]);
-        }   
+        }   */ 
 
         socket.broadcast.emit("actualizar", gridMemorama, false);   
-        socket.broadcast.emit("incializar", lista); 
+        //socket.broadcast.emit("incializar", lista); 
     })
 })
 

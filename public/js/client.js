@@ -68,6 +68,7 @@ socket.on("actualizar", function(grid,tiempo){
 var checkPoints = function(){
     if (points == 4){
          window.setTimeout(function(){
+            socket.emit("restart");
             window.location.href = "" }, 600);
     } 
 }
@@ -75,6 +76,7 @@ var checkPoints = function(){
 socket.on("checkPoints", function(p){
     if (p == 4){
          window.setTimeout(function(){
+            socket.emit("restart");
             window.location.href = "" }, 600);
     }    
 }) 
