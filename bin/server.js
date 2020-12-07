@@ -1,5 +1,24 @@
 var io=require("socket.io")();
 
+var SerialPort = require('serialport');
+var ReadLine = SerialPort.parsers.Readline;
+var parser = new ReadLine();
+var serial_interface = "COM3";
+
+var port = new SerialPort(serial_interface, {
+	baudRate: 9600
+});  
+
+port.on('open', function(err){
+	if(err){
+		console.log("HA OCURRIDO UN ERROR: " + err);
+	}
+	else{
+		console.log("COMUNICACION SERIAL ESTABLECIDA CORRECTAMENTE");
+		port.pipe(parser);
+	}
+});
+
 var gridMemorama = new Array(8);
 var lista = new Array(8);
 
@@ -16,21 +35,20 @@ images[8] = "./img/fruta5.PNG"
 
 var lista = [0,1,2,3,4,5,6,7,8];
 lista = lista.sort(function() {return Math.random() - 0.5});
-//document.write(lista);
 
 for (var j=0; j<9;j++){
     value = lista[j];
     lista[j] = images[value];
 }
 
+for (i=0; i<9; i++){
+    gridMemorama[i]= "./img/question.jpg"
+}
+
 contador=0;
 numPiezas=0;
 tiempo=false;
 points=0;
-
-for (i=0; i<9; i++){
-    gridMemorama[i]= "./img/question.jpg"
-}
 
 io.sockets.on("connection", function(socket){
     console.log("NUEVO CLIENTE CONECTADO CON ID: " + socket.id)
@@ -50,14 +68,51 @@ io.sockets.on("connection", function(socket){
                     positionOne = -1
                     socket.broadcast.emit("actualizar", gridMemorama);
                 }  else {
-                    socket.broadcast.emit("blockCards", x,positionOne);
                     points += 1;
-                    //checkPoints();
                 } 
             numPiezas=0;
         }
         socket.broadcast.emit("actualizar", gridMemorama);
     })
+
+    socket.on("restart", function(){
+        for (i=0; i<9; i++){
+            gridMemorama[i]= "./img/question.jpg"
+        }
+
+        lista = lista.sort(function() {return Math.random() - 0.5});
+        
+        for (var j=0; j<9;j++){
+            value = lista[j];
+            lista[j] = images[value];
+            console.log(lista[j]);
+        }   
+
+        socket.broadcast.emit("actualizar", gridMemorama);   
+        socket.broadcast.emit("incializar", lista); 
+    })
+})
+
+var aux=-1;
+parser.on('data', function(x){
+    aux = Number(x);
+    console.log(aux);
+    gridMemorama[aux] = lista[aux];
+    console.log(lista[aux]);
+        /* if (numPiezas == 1){
+            positionOne = x;
+        } else if (numPiezas == 2){
+            if (lista[positionOne] != lista[x]){ 
+                    gridMemorama[x] = "./img/question.jpg";
+                    gridMemorama[positionOne] = "./img/question.jpg";
+                    positionOne = -1
+                    io.sockets.emit("actualizar", gridMemorama);
+                }  else {
+                    points += 1;
+                } 
+            numPiezas=0;
+        } */
+        io.sockets.emit("actualizar", gridMemorama);
 })
 
 module.exports = io;

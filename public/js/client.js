@@ -24,15 +24,14 @@ var points = 0;
 
 socket.on("incializar", function(grid){
     for (var i=0;i<9;i++){
-    gridLista[i]= grid[i];
+        //alert(grid)
+        gridLista[i]= grid[i];
     }
 }) 
 
 var mov = function(x){
     socket.emit("cambio",x);
     gridMemorama[x].src = gridLista[x];
-    /* gridMemorama[x].src = lista[x];
-    console.log(gridMemorama[x].src)*/
     contador ++;
     if (contador == 1){
         positionOne = x;
@@ -47,28 +46,27 @@ var mov = function(x){
             gridMemorama[x].onclick = function(){};
             gridMemorama[positionOne].onclick = function(){};
             points += 1;
-            //checkPoints();
+            checkPoints();
         } 
         contador = 0;
     } 
 }
 
-socket.on("blockCards", function(x, positionOne){
-    gridMemorama[x].onclick = function(){};
-    gridMemorama[positionOne].onclick = function(){};
-}) 
-
 socket.on("actualizar", function(grid){
+    
     for (var i=0;i<9;i++){
         gridMemorama[i].src = grid[i];
+        alert(grid[i])
     }   
 }) 
 
-var checkPoints = function(x){
+var checkPoints = function(){
     if (points == 4){
-        alert("GANASTE")
-        window.setTimeout(function(){
+        alert("GANASTE");
+
+        //socket.emit("restart");
+         window.setTimeout(function(){
             window.location.href = "" }, 600);
-    }
+    } 
 }
 
