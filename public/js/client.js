@@ -1,6 +1,8 @@
 var socket = io("http://localhost:3000/");
 
 var gridMemorama = new Array(8);
+var gridLista = new Array(8);
+
 
 gridMemorama[0] = document.getElementById("img1");
 gridMemorama[1] = document.getElementById("img2");
@@ -20,28 +22,16 @@ var positionOne = -1
 var contador = 0;
 var points = 0;
 
-images = new Array();
-images[0] = "./img/fruta1.PNG"
-images[1] = "./img/fruta1.PNG"
-images[2] = "./img/fruta2.PNG"
-images[3] = "./img/fruta2.PNG"
-images[4] = "./img/fruta3.PNG"
-images[5] = "./img/fruta3.PNG"
-images[6] = "./img/fruta4.PNG"
-images[7] = "./img/fruta4.PNG"
-images[8] = "./img/fruta5.PNG"
-
-var lista = [0,1,2,3,4,5,6,7,8];
-lista = lista.sort(function() {return Math.random() - 0.5});
-document.write(lista);
-
-for (var j=0; j<9;j++){
-    value = lista[j];
-    lista[j] = images[value];
-}
+socket.on("incializar", function(grid){
+    for (var i=0;i<9;i++){
+    gridLista[i]= grid[i];
+    }
+}) 
 
 var mov = function(x){
-    gridMemorama[x].src = lista[x];
+    socket.emit("cambio",x);
+    gridMemorama[x].src = gridLista[x];
+    /* gridMemorama[x].src = lista[x];
     console.log(gridMemorama[x].src)
     contador ++;
     if (contador == 1){
@@ -60,8 +50,14 @@ var mov = function(x){
             checkPoints();
         }
         contador = 0;
-    }
+    } */
 }
+
+socket.on("actualizar", function(grid){
+    for (var i=0;i<9;i++){
+        gridMemorama[i].src = grid[i];
+    }
+}) 
 
 var checkPoints = function(x){
     if (points == 4){
