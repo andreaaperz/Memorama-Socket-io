@@ -1,20 +1,6 @@
-//var socket = io("http://192.168.42.17:3000");
+var socket = io("http://localhost:3000/");
 
-var gridMemorama = new Array(3);
-
-gridMemorama[0] = new Array();
-gridMemorama[1] = new Array();
-gridMemorama[2] = new Array();
-gridMemorama[3] = new Array();
-gridMemorama[4] = new Array();
-gridMemorama[5] = new Array();
-gridMemorama[6] = new Array();
-gridMemorama[7] = new Array();
-gridMemorama[8] = new Array();
-
-/* valores[0] = new Array(3);
-valores[1] = new Array(3);
-valores[2] = new Array(3); */
+var gridMemorama = new Array(8);
 
 gridMemorama[0] = document.getElementById("img1");
 gridMemorama[1] = document.getElementById("img2");
@@ -30,8 +16,9 @@ for (i=0; i<9; i++){
     gridMemorama[i].src = "./img/question.jpg"
 } 
 
-var cardOne=""
 var positionOne = -1
+var contador = 0;
+var points = 0;
 
 images = new Array();
 images[0] = "./img/fruta1.PNG"
@@ -53,8 +40,6 @@ for (var j=0; j<9;j++){
     lista[j] = images[value];
 }
 
-var contador = 0;
-var points = 0;
 var mov = function(x){
     gridMemorama[x].src = lista[x];
     console.log(gridMemorama[x].src)
