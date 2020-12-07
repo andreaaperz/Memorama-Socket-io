@@ -32,31 +32,36 @@ var mov = function(x){
     socket.emit("cambio",x);
     gridMemorama[x].src = gridLista[x];
     /* gridMemorama[x].src = lista[x];
-    console.log(gridMemorama[x].src)
+    console.log(gridMemorama[x].src)*/
     contador ++;
     if (contador == 1){
         positionOne = x;
     } else if (contador == 2){
-        if (lista[positionOne] != lista[x]){
+        if (gridLista[positionOne] != gridLista[x]){
             setTimeout(() => {  
                 gridMemorama[x].src = "./img/question.jpg";
                 gridMemorama[positionOne].src = "./img/question.jpg";
                 positionOne = -1
              }, 600);
-        } else {
+        }  else {
             gridMemorama[x].onclick = function(){};
             gridMemorama[positionOne].onclick = function(){};
             points += 1;
-            checkPoints();
-        }
+            //checkPoints();
+        } 
         contador = 0;
-    } */
+    } 
 }
+
+socket.on("blockCards", function(x, positionOne){
+    gridMemorama[x].onclick = function(){};
+    gridMemorama[positionOne].onclick = function(){};
+}) 
 
 socket.on("actualizar", function(grid){
     for (var i=0;i<9;i++){
         gridMemorama[i].src = grid[i];
-    }
+    }   
 }) 
 
 var checkPoints = function(x){

@@ -24,6 +24,9 @@ for (var j=0; j<9;j++){
 }
 
 contador=0;
+numPiezas=0;
+tiempo=false;
+points=0;
 
 for (i=0; i<9; i++){
     gridMemorama[i]= "./img/question.jpg"
@@ -37,6 +40,22 @@ io.sockets.on("connection", function(socket){
     
     socket.on("cambio", function(x){
         gridMemorama[x] = lista[x];
+        numPiezas ++;
+        if (numPiezas == 1){
+            positionOne = x;
+        } else if (numPiezas == 2){
+            if (lista[positionOne] != lista[x]){ 
+                    gridMemorama[x] = "./img/question.jpg";
+                    gridMemorama[positionOne] = "./img/question.jpg";
+                    positionOne = -1
+                    socket.broadcast.emit("actualizar", gridMemorama);
+                }  else {
+                    socket.broadcast.emit("blockCards", x,positionOne);
+                    points += 1;
+                    //checkPoints();
+                } 
+            numPiezas=0;
+        }
         socket.broadcast.emit("actualizar", gridMemorama);
     })
 })
