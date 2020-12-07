@@ -53,7 +53,7 @@ points=0;
 io.sockets.on("connection", function(socket){
     console.log("NUEVO CLIENTE CONECTADO CON ID: " + socket.id)
     contador++; console.log(contador); //Numero de usuarios conectados
-    socket.emit("actualizar", gridMemorama);
+    socket.emit("actualizar", gridMemorama, false);
     socket.emit("incializar", lista); //Esto es para que se cargue el juego cada vez que alguien se loggea
     
     socket.on("cambio", function(x){
@@ -61,18 +61,21 @@ io.sockets.on("connection", function(socket){
         numPiezas ++;
         if (numPiezas == 1){
             positionOne = x;
+            socket.broadcast.emit("actualizar", gridMemorama, false);
         } else if (numPiezas == 2){
             if (lista[positionOne] != lista[x]){ 
+                socket.broadcast.emit("actualizar", gridMemorama, false);
                     gridMemorama[x] = "./img/question.jpg";
                     gridMemorama[positionOne] = "./img/question.jpg";
                     positionOne = -1
-                    socket.broadcast.emit("actualizar", gridMemorama);
+                    socket.broadcast.emit("actualizar", gridMemorama, true);
                 }  else {
                     points += 1;
+                    socket.broadcast.emit("checkPoints", points);
+                    socket.broadcast.emit("actualizar", gridMemorama, false);
                 } 
             numPiezas=0;
         }
-        socket.broadcast.emit("actualizar", gridMemorama);
     })
 
     socket.on("restart", function(){
@@ -88,7 +91,7 @@ io.sockets.on("connection", function(socket){
             console.log(lista[j]);
         }   
 
-        socket.broadcast.emit("actualizar", gridMemorama);   
+        socket.broadcast.emit("actualizar", gridMemorama, false);   
         socket.broadcast.emit("incializar", lista); 
     })
 })
@@ -96,23 +99,26 @@ io.sockets.on("connection", function(socket){
 var aux=-1;
 parser.on('data', function(x){
     aux = Number(x);
-    console.log(aux);
     gridMemorama[aux] = lista[aux];
-    console.log(lista[aux]);
-        /* if (numPiezas == 1){
-            positionOne = x;
-        } else if (numPiezas == 2){
-            if (lista[positionOne] != lista[x]){ 
-                    gridMemorama[x] = "./img/question.jpg";
+    numPiezas++;
+    if (numPiezas == 1){
+        positionOne = aux;
+        io.sockets.emit("actualizar", gridMemorama, false); 
+    } else if (numPiezas == 2){
+            if (lista[positionOne] != lista[aux]){ 
+                io.sockets.emit("actualizar", gridMemorama, false); 
+                    gridMemorama[aux] = "./img/question.jpg";
                     gridMemorama[positionOne] = "./img/question.jpg";
                     positionOne = -1
-                    io.sockets.emit("actualizar", gridMemorama);
+                    io.sockets.emit("actualizar", gridMemorama, true);
                 }  else {
                     points += 1;
+                    console.log("puntos " + points);
+                    io.sockets.emit("checkPoints", points);
+                    io.sockets.emit("actualizar", gridMemorama, false); 
                 } 
             numPiezas=0;
-        } */
-        io.sockets.emit("actualizar", gridMemorama);
+        } 
 })
 
 module.exports = io;

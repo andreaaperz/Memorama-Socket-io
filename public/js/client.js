@@ -24,7 +24,6 @@ var points = 0;
 
 socket.on("incializar", function(grid){
     for (var i=0;i<9;i++){
-        //alert(grid)
         gridLista[i]= grid[i];
     }
 }) 
@@ -52,21 +51,30 @@ var mov = function(x){
     } 
 }
 
-socket.on("actualizar", function(grid){
-    
-    for (var i=0;i<9;i++){
-        gridMemorama[i].src = grid[i];
-        alert(grid[i])
+socket.on("actualizar", function(grid,tiempo){
+    if (tiempo===true){ 
+        setTimeout(() => {
+            for (var i=0;i<9;i++){
+                gridMemorama[i].src = grid[i];
+            } 
+        }, 600); 
+     } else {
+        for (var i=0;i<9;i++){
+            gridMemorama[i].src = grid[i];
+        } 
     }   
 }) 
 
 var checkPoints = function(){
     if (points == 4){
-        alert("GANASTE");
-
-        //socket.emit("restart");
          window.setTimeout(function(){
             window.location.href = "" }, 600);
     } 
 }
 
+socket.on("checkPoints", function(p){
+    if (p == 4){
+         window.setTimeout(function(){
+            window.location.href = "" }, 600);
+    }    
+}) 
