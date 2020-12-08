@@ -19,7 +19,7 @@ gridMemorama[10] = document.getElementById("img11");
 gridMemorama[11] = document.getElementById("img12");
 
 for (i=0; i<12; i++){
-    gridMemorama[i].src = "./img/question.jpg"
+    gridMemorama[i].src = "./img/estrella.png"
 } 
 
 var positionOne = -1
@@ -45,8 +45,8 @@ var mov = function(x){
     } else if (contador == 2){
         if (gridLista[positionOne] != gridLista[x]){
             setTimeout(() => {  
-                gridMemorama[x].src = "./img/question.jpg";
-                gridMemorama[positionOne].src = "./img/question.jpg";
+                gridMemorama[x].src = "./img/estrella.png";
+                gridMemorama[positionOne].src = "./img/estrella.png";
                 positionOne = -1
              }, 600);
         }  else {

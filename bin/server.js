@@ -45,7 +45,7 @@ for (var j=0; j<12;j++){
 }
 
 for (i=0; i<12; i++){
-    gridMemorama[i]= "./img/question.jpg"
+    gridMemorama[i]= "./img/estrella.png"
 }
 
 contador=0;
@@ -68,8 +68,8 @@ io.sockets.on("connection", function(socket){
         } else if (numPiezas == 2){
             if (lista[positionOne] != lista[x]){ 
                 socket.broadcast.emit("actualizar", gridMemorama, false);
-                    gridMemorama[x] = "./img/question.jpg";
-                    gridMemorama[positionOne] = "./img/question.jpg";
+                    gridMemorama[x] = "./img/estrella.png";
+                    gridMemorama[positionOne] = "./img/estrella.png";
                     positionOne = -1
                     socket.broadcast.emit("actualizar", gridMemorama, true);
                 }  else {
@@ -84,7 +84,7 @@ io.sockets.on("connection", function(socket){
     socket.on("restart", function(){
         console.log("Juandirandindan")
         for (i=0; i<12; i++){
-            gridMemorama[i]= "./img/question.jpg"
+            gridMemorama[i]= "./img/estrella.png"
         }
 
         /* lista = lista.sort(function() {return Math.random() - 0.5});
@@ -120,8 +120,8 @@ parser.on('data', function(x){
     } else if (numPiezas == 2){
             if (lista[positionOne] != lista[aux]){ 
                 io.sockets.emit("actualizar", gridMemorama, false); 
-                    gridMemorama[aux] = "./img/question.jpg";
-                    gridMemorama[positionOne] = "./img/question.jpg";
+                    gridMemorama[aux] = "./img/estrella.png";
+                    gridMemorama[positionOne] = "./img/estrella.png";
                     positionOne = -1
                     io.sockets.emit("actualizar", gridMemorama, true);
                 }  else {
