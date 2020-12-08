@@ -102,14 +102,16 @@ io.sockets.on("connection", function(socket){
 
 var aux=-1;
 parser.on('data', function(x){
-    console.log(x);
-    aux = Number(x);
-    if (x == 65){
-        aux = 10;
-    } else if (x==66){
-        aux = 11;
-    }
-    console.log(aux);
+    if (x > 66){
+        distancia = 255 - Number(x);
+        io.sockets.emit("background", x);
+    } else {
+            aux = Number(x);
+        if (x == 65){
+            aux = 10;
+        } else if (x==66){
+            aux = 11;
+        }
     gridMemorama[aux] = lista[aux];
     numPiezas++;
     if (numPiezas == 1){
@@ -130,6 +132,8 @@ parser.on('data', function(x){
                 } 
             numPiezas=0;
         } 
+    }
+    
 })
 
 module.exports = io;

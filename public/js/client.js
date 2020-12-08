@@ -3,6 +3,8 @@ var socket = io("http://localhost:3000/");
 var gridMemorama = new Array(12);
 var gridLista = new Array(12);
 
+var body = document.getElementById('body');
+
 gridMemorama[0] = document.getElementById("img1");
 gridMemorama[1] = document.getElementById("img2");
 gridMemorama[2] = document.getElementById("img3");
@@ -29,6 +31,10 @@ socket.on("incializar", function(grid){
         gridLista[i]= grid[i];
     }
 }) 
+
+socket.on("background", function(data){
+    body.style = "background-color: rgb(200," + data + "," + data + ")";
+})
 
 var mov = function(x){
     socket.emit("cambio",x);
