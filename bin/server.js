@@ -19,8 +19,8 @@ port.on('open', function(err){
 	}
 });
 
-var gridMemorama = new Array(8);
-var lista = new Array(8);
+var gridMemorama = new Array(11);
+var lista = new Array(11);
 
 images = new Array();
 images[0] = "./img/fruta1.PNG"
@@ -32,16 +32,19 @@ images[5] = "./img/fruta3.PNG"
 images[6] = "./img/fruta4.PNG"
 images[7] = "./img/fruta4.PNG"
 images[8] = "./img/fruta5.PNG"
+images[9] = "./img/fruta5.PNG"
+images[10] = "./img/fruta6.PNG"
+images[11] = "./img/fruta6.PNG"
 
-var lista = [0,1,2,3,4,5,6,7,8];
+var lista = [0,1,2,3,4,5,6,7,8,9,10,11];
 lista = lista.sort(function() {return Math.random() - 0.5});
 
-for (var j=0; j<9;j++){
+for (var j=0; j<12;j++){
     value = lista[j];
     lista[j] = images[value];
 }
 
-for (i=0; i<9; i++){
+for (i=0; i<12; i++){
     gridMemorama[i]= "./img/question.jpg"
 }
 
@@ -80,7 +83,7 @@ io.sockets.on("connection", function(socket){
 
     socket.on("restart", function(){
         console.log("Juandirandindan")
-        for (i=0; i<9; i++){
+        for (i=0; i<12; i++){
             gridMemorama[i]= "./img/question.jpg"
         }
 
@@ -99,7 +102,14 @@ io.sockets.on("connection", function(socket){
 
 var aux=-1;
 parser.on('data', function(x){
+    console.log(x);
     aux = Number(x);
+    if (x == 65){
+        aux = 10;
+    } else if (x==66){
+        aux = 11;
+    }
+    console.log(aux);
     gridMemorama[aux] = lista[aux];
     numPiezas++;
     if (numPiezas == 1){

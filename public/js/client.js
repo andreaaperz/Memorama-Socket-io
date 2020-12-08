@@ -1,8 +1,7 @@
 var socket = io("http://localhost:3000/");
 
-var gridMemorama = new Array(8);
-var gridLista = new Array(8);
-
+var gridMemorama = new Array(12);
+var gridLista = new Array(12);
 
 gridMemorama[0] = document.getElementById("img1");
 gridMemorama[1] = document.getElementById("img2");
@@ -13,8 +12,11 @@ gridMemorama[5] = document.getElementById("img6");
 gridMemorama[6] = document.getElementById("img7");
 gridMemorama[7] = document.getElementById("img8");
 gridMemorama[8] = document.getElementById("img9");
+gridMemorama[9] = document.getElementById("img10");
+gridMemorama[10] = document.getElementById("img11");
+gridMemorama[11] = document.getElementById("img12");
 
-for (i=0; i<9; i++){
+for (i=0; i<12; i++){
     gridMemorama[i].src = "./img/question.jpg"
 } 
 
@@ -23,7 +25,7 @@ var contador = 0;
 var points = 0;
 
 socket.on("incializar", function(grid){
-    for (var i=0;i<9;i++){
+    for (var i=0;i<12;i++){
         gridLista[i]= grid[i];
     }
 }) 
@@ -54,19 +56,19 @@ var mov = function(x){
 socket.on("actualizar", function(grid,tiempo){
     if (tiempo===true){ 
         setTimeout(() => {
-            for (var i=0;i<9;i++){
+            for (var i=0;i<12;i++){
                 gridMemorama[i].src = grid[i];
             } 
         }, 600); 
      } else {
-        for (var i=0;i<9;i++){
+        for (var i=0;i<12;i++){
             gridMemorama[i].src = grid[i];
         } 
     }   
 }) 
 
 var checkPoints = function(){
-    if (points == 4){
+    if (points == 6){
          window.setTimeout(function(){
             socket.emit("restart");
             window.location.href = "" }, 600);
@@ -74,7 +76,7 @@ var checkPoints = function(){
 }
 
 socket.on("checkPoints", function(p){
-    if (p == 4){
+    if (p == 6){
          window.setTimeout(function(){
             socket.emit("restart");
             window.location.href = "" }, 600);
