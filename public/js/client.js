@@ -53,6 +53,7 @@ var mov = function(x){
             gridMemorama[x].onclick = function(){};
             gridMemorama[positionOne].onclick = function(){};
             points += 1;
+            socket.emit("Leds",points);
             checkPoints();
         } 
         contador = 0;
@@ -77,7 +78,8 @@ var checkPoints = function(){
     if (points == 6){
          window.setTimeout(function(){
             socket.emit("restart");
-            window.location.href = "" }, 600);
+            socket.emit("Leds",0001);
+            window.location.href = "" }, 2000);
     } 
 }
 
@@ -85,6 +87,7 @@ socket.on("checkPoints", function(p){
     if (p == 6){
          window.setTimeout(function(){
             socket.emit("restart");
-            window.location.href = "" }, 600);
+            socket.emit("Leds",0001);
+            window.location.href = "" }, 2000);
     }    
 }) 

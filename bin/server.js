@@ -59,6 +59,33 @@ io.sockets.on("connection", function(socket){
     socket.emit("actualizar", gridMemorama, false);
     socket.emit("incializar", lista); //Esto es para que se cargue el juego cada vez que alguien se loggea
     
+    socket.on("Leds", function(p){
+        if(p == 2){
+            console.log("Entró rojo")
+            port.write("HIGHRojo\n", function(err){
+                if(err)
+                console.log("ERROR AL ENVIAR DATOS: ", err)
+            })
+        } else if(p == 4){
+            console.log("Entró amarillo")
+            port.write("HIGHAmarillo\n", function(err){
+                if(err)
+                console.log("ERROR AL ENVIAR DATOS: ", err)
+            })
+        } else if(p == 6){
+            console.log("Entró verde")
+            port.write("HIGHVerde\n", function(err){
+                if(err)
+                console.log("ERROR AL ENVIAR DATOS: ", err)
+            })
+        } else if(p == 0001){
+            port.write("DOWNALL\n", function(err){
+                if(err)
+                console.log("ERROR AL ENVIAR DATOS: ", err)
+            })
+        }
+    })
+
     socket.on("cambio", function(x){
         gridMemorama[x] = lista[x];
         numPiezas ++;
@@ -74,6 +101,22 @@ io.sockets.on("connection", function(socket){
                     socket.broadcast.emit("actualizar", gridMemorama, true);
                 }  else {
                     points += 1;
+                    if(points == 2){
+                        port.write("HIGHRojo\n", function(err){
+                            if(err)
+                            console.log("ERROR AL ENVIAR DATOS: ", err)
+                        })
+                    } else if(points == 4){
+                        port.write("HIGHAmarillo\n", function(err){
+                            if(err)
+                            console.log("ERROR AL ENVIAR DATOS: ", err)
+                        })
+                    } else if(points == 6){
+                        port.write("HIGHVerde\n", function(err){
+                            if(err)
+                            console.log("ERROR AL ENVIAR DATOS: ", err)
+                        })
+                    }
                     socket.broadcast.emit("checkPoints", points);
                     socket.broadcast.emit("actualizar", gridMemorama, false);
                 } 
@@ -86,6 +129,9 @@ io.sockets.on("connection", function(socket){
         for (i=0; i<12; i++){
             gridMemorama[i]= "./img/estrella.png"
         }
+
+        points =0;
+        numPiezas=0;
 
         /* lista = lista.sort(function() {return Math.random() - 0.5});
         

@@ -1,4 +1,4 @@
-#include <NewPing.h>
+  #include <NewPing.h>
  
 #define TRIGGER_PIN 11
 #define ECHO_PIN 12
@@ -12,12 +12,15 @@ unsigned char muestras = 50;
 
 unsigned char filas[] = {53, 51, 49, 47};       //L1, L2, L3, L4
 unsigned char columnas[] = {45, 43, 41, 39};    //C1, C2, C3, C4
-unsigned char Led = 13;
 
 unsigned char tecla = 1;
 bool b_serial = false;
 bool b_presionado = false;
 unsigned char teclaTemporal = 0;
+
+unsigned char LEDRojo = 10;
+unsigned char LEDAmarillo = 9;
+unsigned char LEDVerde = 8;
 
 void salidas(unsigned char valor){
   unsigned char cociente = valor;
@@ -127,14 +130,17 @@ unsigned char teclado (void)
 
 void setup() {
   Serial.begin(9600);
-
+  
   for(unsigned char i=0; i<sizeof(columnas); i++)
     pinMode(columnas[i], INPUT_PULLUP);
 
   for(unsigned char i=0; i<sizeof(filas); i++)
     pinMode(filas[i], OUTPUT);
 
-    analogWrite(Led, LOW);
+    analogWrite(LEDRojo, LOW);
+    analogWrite(LEDAmarillo, LOW);
+    analogWrite(LEDVerde, LOW);
+
 
 }
 
@@ -147,10 +153,25 @@ void loop() {
   if(Serial.available() > 0)
   {
     cadenaSerial = Serial.readStringUntil('\n'); //RXXX /BXXX /GBXXX¿
-      if (cadenaSerial == "HIGH"){
-        analogWrite(Led, 255);
-      } else {
-        analogWrite(Led, LOW);
+      if (cadenaSerial == "HIGHRojo"){
+        analogWrite(LEDRojo, 255);
+        analogWrite(LEDAmarillo, LOW);
+        analogWrite(LEDVerde, LOW);
+      } else if (cadenaSerial == "HIGHAmarillo"){
+        analogWrite(LEDRojo, LOW);
+        analogWrite(LEDAmarillo, 255);
+        analogWrite(LEDVerde, LOW);
+      }
+      else if (cadenaSerial == "HIGHVerde"){
+        analogWrite(LEDRojo, LOW );
+        analogWrite(LEDAmarillo, LOW);
+        analogWrite(LEDVerde, 255);
+        delay(1000);
+      }
+      else if (cadenaSerial == "DOWNALL"){
+        analogWrite(LEDRojo, LOW);
+        analogWrite(LEDAmarillo, LOW);
+        analogWrite(LEDVerde, LOW);
       }
   }
 //------------------------------------------------------------------------TECLADO
@@ -179,7 +200,7 @@ void loop() {
       Serial.println(tecla);
     }
   }
-//-----------------------------------------------------------------------ULTRASONICO
+//---------------------------------------------------------------------ULTRASONICO
     if(muestra < muestras){
       acumulado += sonar.ping_cm();  
       muestra ++;
