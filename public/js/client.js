@@ -76,6 +76,7 @@ socket.on("actualizar", function(grid,tiempo){
 
 var checkPoints = function(){
     if (points == 6){
+        points=0;
          window.setTimeout(function(){
             socket.emit("restart");
             socket.emit("Leds",0001);
@@ -85,6 +86,8 @@ var checkPoints = function(){
 
 socket.on("checkPoints", function(p){
     if (p == 6){
+        points=0;
+        socket.emit("Buzzer");
          window.setTimeout(function(){
             socket.emit("restart");
             socket.emit("Leds",0001);

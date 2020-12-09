@@ -59,21 +59,25 @@ io.sockets.on("connection", function(socket){
     socket.emit("actualizar", gridMemorama, false);
     socket.emit("incializar", lista); //Esto es para que se cargue el juego cada vez que alguien se loggea
     
+    socket.on("Buzzer", function(){
+        port.write("WINNER\n", function(err){
+            if(err)
+            console.log("ERROR AL ENVIAR DATOS: ", err)
+        })
+    })
+
     socket.on("Leds", function(p){
         if(p == 2){
-            console.log("Entró rojo")
             port.write("HIGHRojo\n", function(err){
                 if(err)
                 console.log("ERROR AL ENVIAR DATOS: ", err)
             })
         } else if(p == 4){
-            console.log("Entró amarillo")
             port.write("HIGHAmarillo\n", function(err){
                 if(err)
                 console.log("ERROR AL ENVIAR DATOS: ", err)
             })
         } else if(p == 6){
-            console.log("Entró verde")
             port.write("HIGHVerde\n", function(err){
                 if(err)
                 console.log("ERROR AL ENVIAR DATOS: ", err)
@@ -172,6 +176,22 @@ parser.on('data', function(x){
                     io.sockets.emit("actualizar", gridMemorama, true);
                 }  else {
                     points += 1;
+                    if(points == 2){
+                        port.write("HIGHRojo\n", function(err){
+                            if(err)
+                            console.log("ERROR AL ENVIAR DATOS: ", err)
+                        })
+                    } else if(points == 4){
+                        port.write("HIGHAmarillo\n", function(err){
+                            if(err)
+                            console.log("ERROR AL ENVIAR DATOS: ", err)
+                        })
+                    } else if(points == 6){
+                        port.write("HIGHVerde\n", function(err){
+                            if(err)
+                            console.log("ERROR AL ENVIAR DATOS: ", err)
+                        })
+                    }
                     console.log("puntos " + points);
                     io.sockets.emit("checkPoints", points);
                     io.sockets.emit("actualizar", gridMemorama, false); 

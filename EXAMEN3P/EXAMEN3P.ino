@@ -3,6 +3,7 @@
 #define TRIGGER_PIN 11
 #define ECHO_PIN 12
 #define MAX_DISTANCE 30
+#define BUZZER 7
 
 NewPing sonar(TRIGGER_PIN, ECHO_PIN, MAX_DISTANCE); 
 
@@ -21,6 +22,8 @@ unsigned char teclaTemporal = 0;
 unsigned char LEDRojo = 10;
 unsigned char LEDAmarillo = 9;
 unsigned char LEDVerde = 8;
+
+String cadenaSerial = "";
 
 void salidas(unsigned char valor){
   unsigned char cociente = valor;
@@ -126,8 +129,6 @@ unsigned char teclado (void)
     return 1;
 }
 
-
-
 void setup() {
   Serial.begin(9600);
   
@@ -141,11 +142,8 @@ void setup() {
     analogWrite(LEDAmarillo, LOW);
     analogWrite(LEDVerde, LOW);
 
-
+    pinMode(BUZZER, OUTPUT);
 }
-
-
-String cadenaSerial = "";
 
 void loop() {
   
@@ -166,12 +164,26 @@ void loop() {
         analogWrite(LEDRojo, LOW );
         analogWrite(LEDAmarillo, LOW);
         analogWrite(LEDVerde, 255);
-        delay(1000);
+        delay(1500);
       }
       else if (cadenaSerial == "DOWNALL"){
         analogWrite(LEDRojo, LOW);
         analogWrite(LEDAmarillo, LOW);
         analogWrite(LEDVerde, LOW);
+      }
+      else if (cadenaSerial == "WINNER"){
+        digitalWrite(BUZZER, HIGH);
+        delay(200);
+        digitalWrite(BUZZER, LOW);
+        delay(200);
+        digitalWrite(BUZZER, HIGH);
+        delay(200);
+        digitalWrite(BUZZER, LOW);
+        delay(200);
+        digitalWrite(BUZZER, HIGH);
+        delay(400);
+        digitalWrite(BUZZER, LOW);
+        delay(200);
       }
   }
 //------------------------------------------------------------------------TECLADO
