@@ -94,3 +94,11 @@ socket.on("checkPoints", function(p){
             window.location.href = "" }, 2000);
     }    
 }) 
+
+socket.on("enable", function(cambio){
+    if (cambio === true){
+        document.getElementById('txtNombre').disabled = true;
+    } else {
+        document.getElementById('txtNombre').disabled = false;
+    }
+}) 

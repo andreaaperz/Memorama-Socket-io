@@ -25,6 +25,9 @@ unsigned char LEDVerde = 8;
 
 String cadenaSerial = "";
 
+bool p_serial = false;
+bool disable = false;
+
 void salidas(unsigned char valor){
   unsigned char cociente = valor;
   unsigned char residuo = 0;
@@ -129,6 +132,12 @@ unsigned char teclado (void)
     return 1;
 }
 
+
+void incremento(){
+    p_serial = true;
+} 
+
+//--------------------------------------------------------------------------------------------------------------------SETUP
 void setup() {
   Serial.begin(9600);
   
@@ -143,9 +152,19 @@ void setup() {
     analogWrite(LEDVerde, LOW);
 
     pinMode(BUZZER, OUTPUT);
+
+    pinMode(2, INPUT_PULLUP);
+    attachInterrupt(digitalPinToInterrupt(2), incremento, RISING);
+
 }
 
 void loop() {
+
+  if (p_serial) {
+    p_serial = false;
+    Serial.print('0001');
+      Serial.write(10);
+  }
   
 //-----------------------------------------------------------------------LEDS
   if(Serial.available() > 0)
@@ -232,7 +251,7 @@ void loop() {
   {
     cm = cm_temporales;
     pwmLed = ((18-(cm-2)) * 255) /18;
-    if(pwmLed > 12){
+    if(pwmLed > 100){
       Serial.print(pwmLed);
       Serial.write(10);
     }

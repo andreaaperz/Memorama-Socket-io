@@ -151,11 +151,21 @@ io.sockets.on("connection", function(socket){
 })
 
 var aux=-1;
+var condatorCambio=0;
 parser.on('data', function(x){
-    if (x > 66){
+    console.log(x);
+    if (x > 100 && x < 256)
+    { //-------------------------------------FONDO DE PANTALLA
         distancia = 255 - Number(x);
         io.sockets.emit("background", x);
-    } else {
+    } else if (x == 12337){
+        condatorCambio++;
+        if (condatorCambio%2==0){
+            io.sockets.emit("enable", false);
+        } else {
+            io.sockets.emit("enable", true);
+        }
+    } else if (x < 67){//------------------------------------------MEMORAMA
             aux = Number(x);
         if (x == 65){
             aux = 10;
@@ -198,8 +208,7 @@ parser.on('data', function(x){
                 } 
             numPiezas=0;
         } 
-    }
-    
+    } 
 })
 
 module.exports = io;
