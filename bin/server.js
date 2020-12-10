@@ -60,6 +60,7 @@ io.sockets.on("connection", function(socket){
     socket.emit("incializar", lista); //Esto es para que se cargue el juego cada vez que alguien se loggea
     
     socket.on("Buzzer", function(){
+        console.log("BUZZER")
         port.write("WINNER\n", function(err){
             if(err)
             console.log("ERROR AL ENVIAR DATOS: ", err)
