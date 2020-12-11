@@ -60,7 +60,8 @@ var mov = function(x){
     } 
 }
 
-socket.on("actualizar", function(grid,tiempo){
+socket.on("actualizar", function(grid,tiempo, data){
+    document.getElementById("lblScore").innerHTML = JSON.stringify(data);
     if (tiempo===true){ 
         setTimeout(() => {
             for (var i=0;i<12;i++){
@@ -76,6 +77,7 @@ socket.on("actualizar", function(grid,tiempo){
 
 var checkPoints = function(){
     if (points == 6){
+        socket.emit("Insert", document.getElementById("txtNombre").value);
         points=0;
         socket.emit("Buzzer");
          window.setTimeout(function(){

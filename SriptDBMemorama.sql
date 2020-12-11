@@ -1,15 +1,18 @@
 CREATE DATABASE DBMemorama;
 
 CREATE TABLE tbl_Juegos(
-NombreUsuario VARCHAR(50) NOT NULL,
-Juegos INT NOT NULL);
+Nombre VARCHAR(50) NOT NULL,
+fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP);
 
-INSERT INTO tbl_Juegos VALUES ('Shareni', 10);
+INSERT INTO tbl_Juegos VALUES ('Cheto');
+INSERT INTO tbl_Juegos VALUES ('Martin');
 
 SELECT * FROM tbl_Juegos;
 
 SELECT Juegos FROM tbl_Juegos WHERE NombreUsuario = 'Shareni';
-SELECT Juegos FROM tbl_Juegos WHERE NombreUsuario = 'Shareni';
+
+DROP TABLE tbl_Juegos;
+DROP DATABASE DBMemorama;
 
 UPDATE tbl_Juegos SET Juegos = 2 WHERE NombreUsuario = 'Shareni';
 

@@ -53,12 +53,37 @@ numPiezas=0;
 tiempo=false;
 points=0;
 
+const mysql = require('mysql');
+
+let con = mysql.createConnection({
+    host: 'localhost',
+    user: 'root',
+    password: '12345',
+    database: 'DBMemorama'
+})
+
+con.connect();
+
+var SelectAll
+con.query("SELECT * FROM tbl_Juegos", (err, res, campos) => {
+    SelectAll = res;
+})
+
+
 io.sockets.on("connection", function(socket){
     console.log("NUEVO CLIENTE CONECTADO CON ID: " + socket.id)
     contador++; console.log(contador); //Numero de usuarios conectados
-    socket.emit("actualizar", gridMemorama, false);
+    socket.emit("actualizar", gridMemorama, false, SelectAll);
     socket.emit("incializar", lista); //Esto es para que se cargue el juego cada vez que alguien se loggea
     
+    socket.on("Insert", function(nombre){
+        con.query("INSERT INTO tbl_Juegos VALUES ('" + nombre +"', now())", (err, res, campos) => {
+            console.log(err, res)
+        })
+        
+        con.end();
+    })
+
     socket.on("Buzzer", function(){
         console.log("BUZZER")
         port.write("WINNER\n", function(err){
@@ -130,13 +155,19 @@ io.sockets.on("connection", function(socket){
     })
 
     socket.on("restart", function(){
-        console.log("Juandirandindan")
         for (i=0; i<12; i++){
             gridMemorama[i]= "./img/estrella.png"
         }
 
         points =0;
         numPiezas=0;
+
+
+       /*  var SelectAll2
+        con.query("SELECT * FROM tbl_Juegos", (err, res, campos) => {
+            SelectAll2 = res;
+        }) */
+        
 
         /* lista = lista.sort(function() {return Math.random() - 0.5});
         
@@ -146,7 +177,7 @@ io.sockets.on("connection", function(socket){
             console.log(lista[j]);
         }   */ 
 
-        socket.broadcast.emit("actualizar", gridMemorama, false);   
+        socket.broadcast.emit("actualizar", gridMemorama, false, SelectAll);   
         //socket.broadcast.emit("incializar", lista); 
     })
 })
@@ -154,7 +185,7 @@ io.sockets.on("connection", function(socket){
 var aux=-1;
 var condatorCambio=0;
 parser.on('data', function(x){
-    console.log(x);
+    //console.log(x);
     if (x > 100 && x < 256)
     { //-------------------------------------FONDO DE PANTALLA
         distancia = 255 - Number(x);
@@ -212,4 +243,5 @@ parser.on('data', function(x){
     } 
 })
 
+con.end();
 module.exports = io;
