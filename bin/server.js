@@ -69,6 +69,7 @@ con.query("SELECT * FROM tbl_Juegos", (err, res, campos) => {
     SelectAll = res;
 })
 
+con.end();
 
 io.sockets.on("connection", function(socket){
     console.log("NUEVO CLIENTE CONECTADO CON ID: " + socket.id)
@@ -77,11 +78,9 @@ io.sockets.on("connection", function(socket){
     socket.emit("incializar", lista); //Esto es para que se cargue el juego cada vez que alguien se loggea
     
     socket.on("Insert", function(nombre){
-        con.query("INSERT INTO tbl_Juegos VALUES ('" + nombre +"', now())", (err, res, campos) => {
+       /*  con.query("INSERT INTO tbl_Juegos VALUES ('" + nombre +"', now())", (err, res, campos) => {
             console.log(err, res)
-        })
-        
-        con.end();
+        }) */
     })
 
     socket.on("Buzzer", function(){
@@ -243,5 +242,4 @@ parser.on('data', function(x){
     } 
 })
 
-con.end();
 module.exports = io;
